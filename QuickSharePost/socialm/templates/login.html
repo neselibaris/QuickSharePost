@@ -1,0 +1,52 @@
+{% load static %}
+
+
+
+
+{% block site-icerik %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block site-baslik %}
+        Login
+        {% endblock site-baslik %}
+    </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <!--custom css-->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+
+
+
+</head>
+
+<body class="lgn">
+
+    <div class="login-page">
+        <div class="form">
+            
+            <form class="login-form" action="{% url 'loginpage' %}" method="post" id="lform">
+                {% csrf_token %}
+                <input type="text" placeholder="username" name="username" required />
+                <input type="password" placeholder="password" name="password" required />
+                <button type="submit" class="btn btn-success">login</button>
+                <p class="message">Not registered? <a href="{% url 'registerpage' %}">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/65f0b13d0a.js" crossorigin="anonymous"></script>
+
+
+{% endblock site-icerik %}

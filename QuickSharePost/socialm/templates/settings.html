@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block site-baslik %}
+Hesap Ayarları
+{% endblock site-baslik %}
+
+{% block site-icerik %}
+
+
+<div class="settings">
+  <h2>Hesap Ayarları</h2>
+  <h4>{{user.username}}</h4>
+  <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Şifre ve Mail güncelleme
+  </button>
+  <hr>
+
+
+
+  <form class="row" action="" method="POST" id="settingspage" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3 col-lg-12 col-md-12 col-sm-12">
+      <label for="profileimg" class="form-label">Profil resminiz</label>
+      <br>
+      <img width="130" src="{{user_profile.profileimg.url}}" alt="" class="rounded">
+      <input type="file" class="form-control mt-2" name="image">
+    </div>
+
+    <div class="mb-3 col-lg-12 col-md-8 col-sm-6">
+      <label for="exampleInputPassword1" class="form-label">Lokasyon</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" name="location"
+        value="{{user_profile.location}}">
+    </div>
+
+    <div class=" mb-3 col-lg-6 col-md-8 col-sm-6 ">
+      <label class="form-label" for="floatingTextarea">Hakkımda</label>
+      <textarea class="form-control" id="floatingTextarea" name="bio">{{user_profile.bio}}</textarea>
+
+    </div>
+
+    <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
+      <label for="education" class="form-label">Eğitim Süreci</label>
+      <input type="text" class="form-control" id="education" name="education" value="{{user_profile.education}}">
+    </div>
+
+    <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
+      <label for="birthdate" class="form-label">Doğum Tarihi</label>
+      <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{user_profile.birthdate}}">
+    </div>
+
+    <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
+      <label for="email" class="form-label">E-posta</label>
+      <input type="email" class="form-control" id="email" name="email" value="{{user_profile.email}}">
+    </div>
+    <div class="">
+      <button type="submit" class="btn btn-success">Kaydet</button>
+      <a href="{% url 'homepage' %}" class="btn btn-danger" role="button">İptal et</a>
+    </div>
+  </form>
+</div>
+
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Şifre ve Mail güncelleme</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- settings.html -->
+        <form action="{% url 'update_email_password' %}" method="post">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">E-posta Adresi</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
+              value="{{ user.email }}">
+          </div>
+
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Şifre</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+          </div>
+
+          <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+        </form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div>
+
+</div>
+
+
+
+{% endblock site-icerik %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block site-baslik %}
+Admin Panel
+{% endblock site-baslik %}
+
+{% block site-icerik %}
+
+<!-- admin_dashboard.html -->
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Kullanıcı Yetkileri ve Yasaklama</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% for user in users %}
+        <div class="card mb-2 col-3" style="width: 12rem;">
+          <div class="card-header bg-white">
+            {{user.username}}
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" role="button">
+              {% if user.profile.is_moderator %}
+              <form action="{% url 'revoke_moderator' user.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Unmoderator</button>
+              </form>
+              {% else %}
+              <div>
+                <form action="{% url 'grant_moderator' user.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success">Moderator</button>
+                </form>
+              </div>
+              {% endif %}
+            </li>
+            <li class="list-group-item">
+              {% if user.profile.is_banned %}
+              <form action="{% url 'unban_user' user.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Unban</button>
+              </form>
+              {% else %}
+              <form action="{% url 'ban_user' user.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Ban</button>
+              </form>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Onay Bekleyen Hesaplar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if unapproved_users %}
+        <!-- Buraya onay bekleyen hesapları listelemek için bir döngü ekleyin -->
+        {% for user_profile in unapproved_users %}
+        <p>{{ user_profile.user }}</p>
+        <a href="{% url 'approve_user' user_profile.id %}" class="btn btn-success">Onayla</a>
+        {% endfor %}
+        {% else %}
+        <p>Onay bekleyen hesap yok.</p>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Admin hesap onay modal biter -->
+
+
+<div class="d-flex justify-content-between">
+  <div>
+    <h1 class="ms-4">Raporlar</h1>
+  </div>
+  <div>
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+      Kullanıcı Yetkileri ve Yasaklama
+    </button>
+    <a href="" role="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">Hesap
+      Onaylama</a>
+  </div>
+</div>
+<hr>
+<div class="report d-flex flex-wrap">
+  {% for report in reports %}
+  <div class="report-details ms-4">
+    <h2>{{ report.title }}</h2>
+    <p>Raporlama Sebebi: {{ report.description }}</p>
+    <p>Raporlayan: {{ report.user.username }}</p>
+    <p>Oluşturulma Tarihi: {{ report.created_at }}</p>
+    <p>Raporlanan Postun Sahibi: {{ report.post.user.username }}</p>
+    <a href="{% url 'post_detail' post_id=report.post.id %}">Raporlanan Post</a>
+  </div>
+  {% endfor %}
+</div>
+
+
+
+{% endblock site-icerik %}

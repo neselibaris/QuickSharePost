@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block site-icerik %}
+  <h1>Postu Sil</h1>
+
+  <p>Eğer bu postu silerseniz, geri alamazsınız. Emin misiniz?</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Evet, Sil">
+  </form>
+{% endblock site-icerik %}
+

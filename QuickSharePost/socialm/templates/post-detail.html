@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block site-baslik %}
+Detay
+
+{% endblock site-baslik %}
+
+
+{% block site-icerik %}
+<div class="profile-content">
+    <div class="tab-content p-0">
+        <div class="tab-pane fade active show" id="profile-post">
+            <div class="timeline">
+                <div class="timeline-body">
+                    <div class="timeline-header">
+
+                        <span class="username"><a href="{% url 'profilepage' pk=post.user %}">@ {{post.user}}</a>
+                            <small></small></span>
+
+                    </div>
+                    <div class="timeline-content">
+                        <img src="{{post.image.url}}" alt="" style="max-width: 55%; height: auto;">
+                        <br>
+                        <p>
+                            {{post.caption}}
+                        </p>
+                    </div>
+
+                    <div class="timeline-likes">
+                        <div class="stats-right">
+                            <span class="stats-text">{{post.created_at}}</span>
+                        </div>
+                        <div class="stats d-flex">
+
+
+                            <a href="/like-post?post_id={{post.id}}">
+                                <i class="fa-solid fa-heart fa-2xl me-2" style="color: #d40c0c;"></i>
+                            </a>
+
+
+                            <span class="stats-total">
+                                {% if post.no_of_likes == 0 %}
+                                <p>0</p>
+                                <br>
+                                {% elif post.no_of_likes == 1 %}
+                                <p>{{post.no_of_likes}}</p>
+                                {% else %}
+                                <p>{{post.no_of_likes}}</p>
+                                {% endif %}
+                            </span>
+
+                            <a href="{% url 'add_comment_to_post' post.id %}" role="button" data-bs-toggle="modal"
+                                data-bs-target="#myModal"><i class="fa-solid fa-comment fa-2xl ms-3"></i></a>
+                        </div>
+                    </div>
+                    <div class="timeline-footer mb-2">
+                        {% for comment in comments %}
+
+                        <div class="comment d-flex mt-4 border-bottom">
+                            <div class="user ms-2">
+                                <img src="{{ comment.author.profile.profileimg.url }}">
+                                <span class="ms-2"><small>{{ comment.author.username }}</small></span>
+                            </div>
+                            <div class="ms-3">
+                                <p>| {{ comment.text }}</p>
+                                <small class="stats-text">
+                                    {{ comment.created_on }}
+                                    {% if request.user == comment.author or request.user.profile.is_moderator %}
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                    href="{% url 'delete_comment' comment.id %}">Yorumu
+                                                    sil</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#myModal2">Yorumu düzenle</a></li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- modal başlangıç -->
+<form action="{% url 'add_comment_to_post' post.id %}" method="post">
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Yorum Yapma</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-text">With textarea</span>
+                        <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- yorum modal biter -->
+{% for comment in comments %}
+<!-- yorum düzenleme modal -->
+<form action="{% url 'edit_comment' comment.id %}" method="post">
+    <div class="modal fade" id="myModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Yorum Düzenleme</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <div class="input-group">
+                        <span class="input-group-text">With textarea</span>
+                        <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- yorum düzenleme modal biter -->
+{% endfor %}
+
+
+
+
+{% endblock site-icerik %}

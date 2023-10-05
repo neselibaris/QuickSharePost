@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block site-baslik %}
+Anasayfa
+
+{% endblock site-baslik %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+
+{% block site-icerik %}
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+
+{% for post in posts reversed %}
+
+<!-- begin profile-content -->
+<div class="profile-content">
+    <!-- begin tab-content -->
+    <div class="tab-content p-0">
+        <!-- begin #profile-post tab -->
+        <div class="tab-pane fade active show" id="profile-post">
+            <!-- begin timeline -->
+            <ul class="timeline">
+
+                <!-- begin timeline-body -->
+                <div class="timeline-body">
+                    <div class="timeline-header">
+
+                        <span class="username"><a href="{% url 'profilepage' pk=post.user %}">@ {{post.user}}</a>
+                            <small></small></span>
+
+                        {% if request.user == post.user or request.user.profile.is_moderator %}
+                        <div class="dropdown">
+                            <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a role="button" class="btn " href="{% url 'delete_post' post.id %}">sil</a>
+                                <li><a role="button" class="btn " href="{% url 'edit_post' post.id %}"
+                                        data-bs-toggle="modal" data-bs-target="#MyModal2">editle</a></li>
+                                <li><a role="button" class="btn" data-bs-toggle="modal"
+                                        data-bs-target="#reportModal">Raporla !</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="timeline-content">
+                        <img src="{{post.image.url}}" alt="" style="max-width: 55%; height: auto;">
+                        <br>
+                        <p>
+                            {{post.caption}}
+                        </p>
+                    </div>
+
+                    <div class="timeline-likes">
+                        <div class="stats-right">
+                            <span class="stats-text">{{post.created_at}}</span>
+                            <a href="{% url 'post_detail' post.id %}">Detayları Gör</a>
+                        </div>
+
+                        <div class="stats d-flex">
+                            <a href="/like-post?post_id={{post.id}}">
+                                <i class="fa-solid fa-heart me-2" style="color: #d40c0c;" id="fa-solidd"></i>
+                            </a>
+                            <span class="stats-total">
+                                {% if post.no_of_likes == 0 %}
+                                <p>0</p>
+                                <br>
+                                {% elif post.no_of_likes == 1 %}
+                                <p>{{post.no_of_likes}}</p>
+                                {% else %}
+                                <p>{{post.no_of_likes}}</p>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<hr style="opacity: 0;">
+
+
+
+
+<!-- Rapor modalı -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rapor Oluştur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_report' post.id %}" method="post">
+                    {% csrf_token %}
+                    <!-- Rapor içeriği, başlık gibi alanları ekleyin -->
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Başlık" name="title"
+                            aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <textarea class="form-control" aria-label="With textarea" name="description"
+                            placeholder="Raporlama Sebebiniz" rows="6" style="resize: none;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Raporla</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endfor %}
+<!-- Edit Modal başlangıç -->
+{% for post in posts %}
+<div class="modal fade" id="MyModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Post Düzenleme</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'edit_post' post.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+
+                        <label for="exampleFormControlTextarea1" class="form-label">İçerik</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" style="resize: none;"
+                            name="caption"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim ekleme</label>
+                        <br>
+                        <input type="file" name="image_upload">
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal et</button>
+                    <button class="btn btn-success" data-bs-dismiss="modal" type="submit">Güncelle</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal bitiş -->
+
+
+
+
+{% endfor %}
+
+
+{% endblock site-icerik %}
