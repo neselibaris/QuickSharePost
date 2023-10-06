@@ -12,11 +12,11 @@ Raporlama sistemi mevcuttur başlık ve açıklama şeklinde raporlama yapabilir
  
  -Hesabı onaylı kullanıcı site de tümüyle etkileşime geçebilir herhangi bir kısıtlaması yoktur.
  
- -Moderator normal kullanıcıya nazaran tüm postları ve yorumları düzenleyip silme yetkisine sahiptir.
+ -Moderator normal kullanıcıdan farklı olarak tüm postları ve yorumları düzenleyip silme yetkisine sahiptir.
  
- -Admin moderator yetkilerinin dışında hesapları sadece admin onaylayabilir ayrıca admin_dashboard sayfasına erişim hakkına sahiptir.
+ -Admin, moderatorün yetkilerinin dışında yeni kayıt olmış hesapları onaylama yetlisine sahiptir.
 
-Admin dashboard sayfası vardır admin sayfada tüm kullanıcılar listelenir ve admin ordan yetki verip banlama yapabilr aynı zamanda raporlamalarda sayfada gözükür.
+Admin dashboard sayfası vardır. Bu sayfada tüm kullanıcılar listelenir ve admin sayfadan yetki verip banlama yapabilr aynı zamanda raporlamalarda sayfada gözükür.
 
 
 Test etmek veya denemek için django ve python bilgisayarınız da yüklü olmalıdır, repoyu klonladıktan sorna terminale sırasıyla şu komutları yazınız:
