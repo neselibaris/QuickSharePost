@@ -16,8 +16,13 @@ Detay
                 <div class="timeline-body">
                     <div class="timeline-header">
 
-                        <span class="username"><a href="{% url 'profilepage' pk=post.user %}">@ {{post.user}}</a>
-                            <small></small></span>
+                        <span class="username d-flex align-items-center">
+                            <a href="{% url 'profilepage' pk=post.user %}" class="d-flex align-items-center">
+                                <img src="{{ post.user.profile.profileimg.url }}"
+                                    alt="{{ post.user.username }}'s Profile Image" width="32" height="32" class="me-2">
+                                {{ post.user.username }}
+                            </a>
+                        </span>
 
                     </div>
                     <div class="timeline-content">
@@ -38,21 +43,13 @@ Detay
                             <a href="/like-post?post_id={{post.id}}">
                                 <i class="fa-solid fa-heart fa-2xl me-2" style="color: #d40c0c;"></i>
                             </a>
-
-
-                            <span class="stats-total">
-                                {% if post.no_of_likes == 0 %}
-                                <p>0</p>
-                                <br>
-                                {% elif post.no_of_likes == 1 %}
-                                <p>{{post.no_of_likes}}</p>
-                                {% else %}
-                                <p>{{post.no_of_likes}}</p>
-                                {% endif %}
-                            </span>
-
                             <a href="{% url 'add_comment_to_post' post.id %}" role="button" data-bs-toggle="modal"
                                 data-bs-target="#myModal"><i class="fa-solid fa-comment fa-2xl ms-3"></i></a>
+
+                            <span class="stats-total">
+                                <p>{{ post.comment_set.count }}</p>
+                            </span>
+
                         </div>
                     </div>
                     <div class="timeline-footer mb-2">
@@ -108,7 +105,7 @@ Detay
                     {% csrf_token %}
                     <div class="input-group">
                         <span class="input-group-text">With textarea</span>
-                        <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
+                        <textarea class="form-control text-box" aria-label="With textarea" name="text"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -4,15 +4,119 @@
     padding: 0;
 }
 
-body {
-    background: #eee;
+:root {
+    --primarycolor: #eee;
+    --secondarycolor: #fff;
+    --text-color: #2d353c;
+    --outlinecolor: #000000;
+    --inputcolor: lightgrey;
+    --navbarcolor: #111827;
+    --postbodycolor: #fff;
 }
 
+body {
+    background: var(--primarycolor);
+}
+
+.navlogo {
+    display: inline-block;
+    width: 52px;
+    height: 52px;
+}
 
 .container {
     margin-top: 4rem;
 }
 
+.timeline-content p {
+    color: var(--text-color);
+}
+
+/***** profile settings *****/
+.rounded-full {
+    border-radius: 100%;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.container-box {
+    display: flex;
+    justify-content: center;
+}
+
+.notification-icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-count {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: red;
+    /* İstediğiniz arka plan rengini ayarlayabilirsiniz */
+    color: white;
+    /* Yazı rengi */
+    padding: 2px 6px;
+    /* İstediğiniz iç boşluğu ayarlayabilirsiniz */
+    border-radius: 50%;
+    /* Kareyi yuvarlak yapar */
+    font-size: 12px;
+}
+
+#like-icon {
+    display: none;
+    /* İkonu gizle */
+    font-size: 1rem;
+    position: fixed;
+    bottom: 40px;
+    right: 50%;
+    transform: translateX(50%);
+    color: #d40c0c;
+    transition: transform 0.2s ease-in-out, font-size 0.2s ease-in-out;
+}
+
+.timeline-content {
+    position: relative;
+}
+
+
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Yarı saydam beyaz */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    /* Başlangıçta görünmez yapmak için */
+    transition: opacity 0.3s;
+    cursor: pointer;
+    /* Göster/gizle efekti */
+}
+
+.overlay i {
+    font-size: 24px;
+    color: #000;
+    /* Kamera simgesi rengi */
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+    /* Resmin üzerine gelince yarı saydam görünümü göster */
+}
+
+/***** End profile settings *****/
 /* Register Başlar */
 .registerForm input {
     display: block;
@@ -28,11 +132,11 @@ body {
 }
 
 .registerForm input:hover {
-    outline: 1px solid lightgrey;
+    outline: 1px solid var(--inputcolor);
 }
 
 .registerForm input:focus {
-    border-bottom: 2px solid #000000;
+    border-bottom: 2px solid var(--outlinecolor);
     border-radius: 4px 4px 2px 2px;
 }
 
@@ -43,9 +147,26 @@ body {
 /* Register Biter */
 
 #settingspage input {
-    display: flex;
     width: 30%;
 }
+
+.form-control {
+    display: none;
+}
+
+.text-box {
+    display: block !important;
+}
+
+.inputlabel {
+    display: none;
+}
+
+#save-button,
+#cancel-button {
+    display: none;
+}
+
 
 /* upload */
 .inputs {
@@ -61,6 +182,10 @@ body {
 /* Post başlar */
 select.form-control:not([size]):not([multiple]) {
     height: 34px;
+}
+
+.dropdown-toggle::after {
+    color: var(--text-color);
 }
 
 .form-control.input-inline {
@@ -106,7 +231,7 @@ select.form-control:not([size]):not([multiple]) {
 .timeline .timeline-time .time {
     line-height: 24px;
     font-size: 20px;
-    color: #242a30
+    color: var(--text-color)
 }
 
 .timeline .timeline-icon {
@@ -125,9 +250,9 @@ select.form-control:not([size]):not([multiple]) {
     border-radius: 20px;
     background: #d9e0e7;
     line-height: 10px;
-    color: #fff;
+    color: var(--secondarycolor);
     font-size: 14px;
-    border: 5px solid #2d353c;
+    border: 5px solid var(--text-color);
     transition: border-color .2s linear
 }
 
@@ -135,7 +260,7 @@ select.form-control:not([size]):not([multiple]) {
 
     margin-left: 23%;
     margin-right: 17%;
-    background: #fff;
+    background: var(--postbodycolor);
     position: relative;
     padding: 20px 25px;
     border-radius: 6px
@@ -146,7 +271,7 @@ select.form-control:not([size]):not([multiple]) {
     display: block;
     position: absolute;
     border: 10px solid transparent;
-    border-right-color: #fff;
+    border-right-color: var(--secondarycolor);
     left: -20px;
     top: 20px
 }
@@ -183,7 +308,7 @@ select.form-control:not([size]):not([multiple]) {
 
 .timeline-header .username,
 .timeline-header .username a {
-    color: #2d353c
+    color: var(--text-color)
 }
 
 .timeline img {
@@ -207,7 +332,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .timeline-likes {
-    color: #6d767f;
+    color: var(--text-color);
     font-weight: 600;
     font-size: 12px
 }
@@ -218,7 +343,8 @@ select.form-control:not([size]):not([multiple]) {
 
 .timeline-likes .stats-total {
     display: inline-block;
-    line-height: 20px
+    line-height: 20px;
+    margin-left: 5px;
 }
 
 .timeline-likes .stats-icon {
@@ -226,6 +352,8 @@ select.form-control:not([size]):not([multiple]) {
     margin-right: 5px;
     font-size: 9px
 }
+
+
 
 .timeline-likes .stats-icon+.stats-icon {
     margin-left: -2px
@@ -243,8 +371,7 @@ select.form-control:not([size]):not([multiple]) {
 /* Post biter */
 
 /* Login başlar */
------------------------------------- 
-.login-page {
+------------------------------------ .login-page {
     width: 360px;
     padding: 8% 0 0;
     margin: auto;
@@ -253,7 +380,7 @@ select.form-control:not([size]):not([multiple]) {
 .form {
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: var(--secondarycolor)FFF;
     max-width: 360px;
     margin: 0 auto 100px;
     padding: 45px;
@@ -282,7 +409,7 @@ select.form-control:not([size]):not([multiple]) {
     width: 100%;
     border: 0;
     padding: 15px;
-    color: #FFFFFF;
+    color: var(--secondarycolor)FFF;
     font-size: 14px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
@@ -300,14 +427,16 @@ select.form-control:not([size]):not([multiple]) {
     color: #4CAF50;
     text-decoration: none;
 }
+
 /* Login biter */
 
---------------------------------- 
+---------------------------------
+
 /* Register başlar */
 .registerForm {
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: var(--secondarycolor)FFF;
     max-width: 360px;
 
     margin-left: 0 !important;
@@ -337,24 +466,80 @@ select.form-control:not([size]):not([multiple]) {
     width: 100%;
     border: 0;
     padding: 15px;
-    color: #FFFFFF;
+    color: var(--secondarycolor)FFF;
     font-size: 14px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
 }
+
 /* Register biter */
 
 /* Navbar başlar */
 .sidenav {
-    width: 4%;
+    width: 0%;
+    overflow: hidden;
     height: 100%;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: rgba(17, 24, 39);
+    background-color: var(--navbarcolor);
+    transition: width 0.5s ease;
+    /* Width değerinde geçiş efekti ekleyin */
 
+
+}
+
+.sidenav.open {
+    width: 4%;
+    /* Açık durumda width'i %4 olarak ayarlayın */
+}
+
+.toggle {
+    /* Unicode karakteri kullanarak üç çizgi simgesi (Hamburger ikonu) ekleyin */
+    font-size: 2vw;
+    /* İkonun boyutunu ayarlayın */
+    line-height: 50px;
+    /* İkonun dikey hizalamasını ayarlayın */
+    text-align: center;
+    /* İkonu yatayda ortala */
+    cursor: pointer;
+    color: white;
+    /* İkon rengini ayarlayın */
+    background-color: var(--navbarcolor);
+    width: 50px;
+    height: 50px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    position: fixed;
+    z-index: 2;
+    /* Diğer elemanların üzerinde olmasını sağlar */
+    top: 40%;
+    /* Dikey eksende ortala */
+    transform: translateY(-40%);
+    /* Dikey eksende sayfanın ortasına taşı */
+    left: 0;
+    /* Yatay pozisyonu sabit tut */
+    padding-right: 10px;
+    padding-bottom: 10px;
+    transition: left 0.5s ease;
+    /* Sol ve sağ kaydırmayı animasyonla yap */
+}
+
+
+ul.list-unstyled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+ul.list-unstyled li {
+    margin-right: 10px;
+    /* İstenilen boşluğu ayarlayabilirsiniz */
+    margin-bottom: 15px;
 }
 
 .sidenav ul {
@@ -366,10 +551,12 @@ select.form-control:not([size]):not([multiple]) {
     width: 100%;
     height: 50px;
     color: white;
+    font-size: 1.4vw;
 }
 
 .sidenav a:hover {
-    background-color: lightgray;
+    color: lightgray;
+    scale: 1.1;
 }
 
 /* Navbar biter */
@@ -387,6 +574,7 @@ select.form-control:not([size]):not([multiple]) {
     overflow: hidden;
     border-radius: 30px
 }
+
 /* COMMENT */
 
 /* ICONS */
@@ -399,6 +587,7 @@ select.form-control:not([size]):not([multiple]) {
 
     font-size: 1.3vw;
 }
+
 /* ICONS */
 
 
@@ -414,12 +603,12 @@ select.form-control:not([size]):not([multiple]) {
         margin-left: 1.5rem;
     }
 
-    .sidenav img{
+    .sidenav img {
         width: 35px;
         height: 35px;
     }
 
-    
+
 }
 
 @media (max-width:768px) {
@@ -445,7 +634,7 @@ select.form-control:not([size]):not([multiple]) {
         margin-left: 1.5rem;
     }
 
-    .sidenav img{
+    .sidenav img {
         width: 20px;
         height: 20px;
     }
@@ -469,14 +658,14 @@ select.form-control:not([size]):not([multiple]) {
 
     .sidenav {
         width: 9%;
-    
+
     }
 
     #fa-solid {
         font-size: 3vw;
     }
 
-    .sidenav img{
+    .sidenav img {
         width: 15px;
         height: 15px;
     }

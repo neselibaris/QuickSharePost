@@ -4,18 +4,26 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from socialm.views import *
+from socialm.views import get_notification_count
+from socialm.views import go_latest_notification
+from socialm.views import mark_notification_as_read
+from socialm.views import like
 import uuid
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='homepage'),
     path('register', register, name= 'registerpage'),
+    path('update_profile_image/', update_profile_image, name='update_profile_image'),
+    path('get_notification_count/', get_notification_count, name='get_notification_count'),
+    path('mark_notification_as_read/', mark_notification_as_read, name='mark_notification_as_read'),
+    path('go_latest_notification/', go_latest_notification, name='go_latest_notification'),
     path('login', giris, name='loginpage'),
     path('logout',cikis, name='logoutpage'),
     path('settings', hesap, name='settingspage'),
     path('upload', upload, name='uploadpage'),
     path('profile/<str:pk>', profile, name='profilepage'),
-    path('like-post', like, name='like-post'),
+    path('like/<str:post_id>/', like, name='like'),
     path('post/<uuid:post_id>/', post_detail, name='post_detail'),
     path('post/<uuid:post_id>/add_comment/',add_comment_to_post, name='add_comment_to_post'),
     path('edit-post/<uuid:post_id>/',edit_post, name='edit_post'),
