@@ -4,6 +4,7 @@
 - Bildirim eklendi.
 - Ana sayfa görünümü değiştirildi.
 - Dark mode eklendi.
+  
 Kullanıcıların kolaylıkla tweet paylaşıp düzenleme ve silme işlemlerini yapabilirler.
 
 Yorum yapma düzenleme ve silme işlemi
