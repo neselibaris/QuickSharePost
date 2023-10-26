@@ -9,7 +9,7 @@
 - Özel Sohbet Eklendi (Direct Message)
 - Login ve Register Sayfa Tasarımı Değiştirildi.
 - Profil Sayfasına Banner Özelliği eklendi (Kullanıcılar Kendi Profiline Banner Koyabiliyor)
-- çoğu sayfada stillemeler yapıldı
+- Çoğu sayfada stillemeler yapıldı
 - Onaylanmış Hesap Özelliği (Plus Hesabı) Eklendi
   
 Kullanıcıların kolaylıkla tweet paylaşıp düzenleme ve silme işlemlerini yapabilirler.
@@ -39,11 +39,18 @@ py manage.py migrate
 
 py manage.py runserver
 Örnekler:
-Anasayfa:
+![Ekran görüntüsü 2023-10-26 230644](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/8519949e-2bef-4ce6-94e2-f06ec70f00ef)
+![Ekran görüntüsü 2023-10-26 230705](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/56fcef2c-980e-454e-ac9b-c042e28182bf)
+![Ekran görüntüsü 2023-10-26 230735](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/9f795805-1eab-48a1-87dc-a6815cd61994)
+![Ekran görüntüsü 2023-10-26 230809](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/ab3ca762-97e4-4156-80a8-85a76938540f)
+![Ekran görüntüsü 2023-10-26 230825](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/d9cc33f5-0616-45b8-bc96-497ba43f3ace)
+![Ekran görüntüsü 2023-10-26 230842](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/b3cfecc9-c3f6-4127-99d4-81fdba60c3a3)
+![Ekran görüntüsü 2023-10-26 230912](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/b67f2f3a-db36-4f05-9ecc-c1cf3833dd51)
+![Ekran görüntüsü 2023-10-26 230929](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/20306df5-8984-4547-aef3-8ad87f60e339)
 
 
 Eski Örnekler:
-![dashboard]([https://github.com/neselibaris/QuickSharePost/assets/114444125/7b9033f3-a4bb-4ed2-aea8-e97206978037](https://media.discordapp.net/attachments/1034081286186344448/1167192666400899234/Ekran_goruntusu_2023-10-26_230644.png?ex=654d3be1&is=653ac6e1&hm=e6758bf680d5addf5ec516f656b69d2594f8cd6b9980fd2665c6262fbdd10839&=&width=1325&height=647))
+
 Dashboard
 ![dashboard](https://github.com/neselibaris/QuickSharePost/assets/114444125/7b9033f3-a4bb-4ed2-aea8-e97206978037)
 
