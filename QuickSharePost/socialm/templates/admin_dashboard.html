@@ -95,6 +95,31 @@ Admin Panel
     </div>
   </div>
 </div>
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModal3Label">Plus Üyelik İsteği Bekleyen Hesaplar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if unverified %}
+        <!-- Buraya onay bekleyen hesapları listelemek için bir döngü ekleyin -->
+        {% for user_profile in unverified %}
+        <p>{{ user_profile.user }}</p>
+        <a href="{% url 'verified_user' user_profile.id %}" class="btn btn-success">Plus Üyeliği Ver</a>
+        {% endfor %}
+        {% else %}
+        <p>Plus üyeliği bekleyen kimsecikler yok!</p>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Admin hesap onay modal biter -->
 
 
@@ -108,6 +133,7 @@ Admin Panel
     </button>
     <a href="" role="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">Hesap
       Onaylama</a>
+      <a href="" role="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal3">Hesaba Plus Üyeliği Ver</a>
   </div>
 </div>
 <hr>

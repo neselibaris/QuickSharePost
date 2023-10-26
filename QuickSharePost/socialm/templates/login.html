@@ -20,29 +20,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(to bottom, #43cea2, #185a9d);
+            background: linear-gradient(to left top, #5f9bb0, #d6f9fe);
+
         }
 
-        .login-page {
-            width: 400px;
-            padding: 40px;
-            position: relative;
-            background: #ffffff;
-            text-align: center;
-            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-        }
-
-        .login-page:before {
-            content: "";
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            bottom: -5px;
-            left: -5px;
-            z-index: -1;
-            background: #ffffff;
-            border-radius: 8px;
+        .form {
+            border-radius: 40px;
+            width: 400px !important;
         }
 
         .login-page h1 {
@@ -80,6 +64,58 @@
         .message a:hover {
             text-decoration: underline;
         }
+
+        .form .message {
+            color: #000 !important;
+        }
+
+        input {
+            border-radius: 40px;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        /* CSS */
+        .submit {
+            background: linear-gradient(to right, #3bbfe9, #042954) !important;
+            border-radius: 8px;
+            border-style: none;
+            box-sizing: border-box;
+            color: #FFFFFF !important;
+            border-radius: 30px;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            height: 4rem;
+            padding: 0 1.6rem;
+            text-align: center;
+            text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+            transition: all .5s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .submit:hover {
+            box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+            transition-duration: .1s;
+        }
+
+        @media (min-width: 768px) {
+            .submit {
+                padding: 0 2.6rem;
+            }
+        }
     </style>
 </head>
 
@@ -87,16 +123,17 @@
     <div class="login-page">
         <div class="form">
             <div class="login-header">
-                <img src="{% static 'buzz-logo.png' %}" alt="Buzz Logo" class="login-logo">
-                <h2>BUZZ</h2>
+                <img src=/media/logo.png alt="Buzz Logo" style="max-width: 200px;" class="login-logo">
+
+
             </div>
             <form class="login-form" action="{% url 'loginpage' %}" method="post" id="lform">
                 {% csrf_token %}
-                <input type="text" placeholder="Yesenmamd" name="username" required />
+                <input type="text" placeholder="Username" name="username" required />
                 <input type="password" placeholder="Password" name="password" required />
-                <button type="submit" class="btn btn-success">Login</button>
+                <button type="submit" class="btn btn-success submit">Login</button>
                 <p class="message">Repesting he he ftslow oflofermetion and coanevetions on soceal mealia.</p>
-                <p class="message">Not registered? <a href="{% url 'registerpage' %}">Create an account</a></p>
+                <p class="message">Not registered? <br> <a href="{% url 'registerpage' %}" style="margin-top:55px; color: #2E94E3 !important; font-weight: bold;">Create an account</a></p>
             </form>
         </div>
     </div>

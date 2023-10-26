@@ -32,10 +32,15 @@ Buzz Knot
 
                         <span class="username d-flex align-items-center">
                             <a href="{% url 'profilepage' pk=post.user %}" class="d-flex align-items-center">
-                                <img src="{{ post.user.profile.profileimg.url }}"
+                                <img class="rounded-circle ms-2 me-1" width="32" height="32"
+                                    src="{{ post.user.profile.profileimg.url }}"
                                     alt="{{ post.user.username }}'s Profile Image" width="32" height="32" class="me-2">
                                 {{ post.user.username }}
                             </a>
+                            {% if post.user.profile.verified %}
+                            <img width="24" height="24" class="me-1 ms-1" src="/media/verfiy.png" alt="Plus Rozeti" title="Plus Üye">
+                            {% else %}
+                            {% endif %}
                         </span>
 
 
@@ -73,7 +78,7 @@ Buzz Knot
                         <div class="stats d-flex">
 
                             <a href="#" class="like-button" data-post-id="{{ post.id }}">
-                                <i class="fa-solid fa-heart me-2" style="color: #d40c0c;"></i>
+                                <i class="fa-solid fa-heart me-2 fa-2xl" style="color: #d40c0c;"></i>
                             </a>
 
 
