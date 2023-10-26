@@ -11,6 +11,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import *
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
+from .models import Message
+from django.core.serializers import serialize
+from django.views.decorators.http import require_POST
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404
+from .models import Profile
+
+import json
 
 # Create your views here.
 
@@ -39,6 +49,19 @@ def create_notification(user, post, is_comment=False):
     Notification.objects.create(user=user, post=post, is_comment=is_comment)
 
 
+def message_view(request):
+    if request.user.is_authenticated:
+        messages_received = Message.objects.filter(receiver=request.user)
+        messages_sent = Message.objects.filter(sender=request.user)
+        all_messages = messages_received | messages_sent
+        all_messages = all_messages.order_by("timestamp")
+        return render(request, "messages.html", {"all_messages": all_messages})
+    else:
+        return render(
+            request, "login.html"
+        )  # Ya da uygun bir yönlendirme yapabilirsiniz
+
+
 def get_notification_count(request):
     if request.user.is_authenticated:
         unread_notification_count = Notification.objects.filter(
@@ -47,6 +70,108 @@ def get_notification_count(request):
         return JsonResponse({"count": unread_notification_count})
     else:
         return JsonResponse({"count": 0})
+
+
+def search_users(request):
+    query = request.GET.get("query", "")
+    users = User.objects.filter(username__icontains=query)
+    user_list = []
+
+    for u in users:
+        profile = Profile.objects.get(user=u)
+        user_list.append({
+            'username': u.username,
+            'profileimg': profile.profileimg.url if profile.profileimg else ''
+        })
+
+    return JsonResponse(user_list, safe=False)
+
+
+def get_past_conversations(request):
+    user = request.user
+    conversations = Message.objects.filter(Q(sender=user) | Q(receiver=user)).values_list('sender', 'receiver').distinct()
+    unique_users = set()
+
+    for sender, receiver in conversations:
+        if sender != user.id:
+            unique_users.add(sender)
+        if receiver != user.id:
+            unique_users.add(receiver)
+
+    past_users = User.objects.filter(id__in=unique_users)
+    user_list = []
+
+    for u in past_users:
+        profile = Profile.objects.get(user=u)
+        # Okunmamış mesaj sayısını hesapla
+        unread_count = Message.objects.filter(sender=u, receiver=user, is_read=False).count()
+        
+        user_list.append({
+            'username': u.username,
+            'profileimg': profile.profileimg.url if profile.profileimg else '',
+            'unread_count': unread_count  # Okunmamış mesaj sayısını ekle
+        })
+
+    return JsonResponse(user_list, safe=False)
+
+
+def send_message(request):
+    if request.method != 'POST':
+        return JsonResponse({"status": "error", "message": "Method not allowed"}, status=405)
+
+    sender = request.user
+    receiver_username = request.POST.get("receiver")
+
+    if not receiver_username:
+        return JsonResponse({"status": "error", "message": "Receiver username not provided"}, status=400)
+
+    try:
+        receiver = User.objects.get(username=receiver_username)
+    except ObjectDoesNotExist:
+        return JsonResponse({"status": "error", "message": "Receiver does not exist"}, status=404)
+
+    message = request.POST.get("message")
+
+    if not message:
+        return JsonResponse({"status": "error", "message": "Message content not provided"}, status=400)
+
+    Message.objects.create(sender=sender, receiver=receiver, message=message)
+    return JsonResponse({"status": "ok"})
+
+@login_required
+def get_messages(request, username=None):
+    user = User.objects.get(username=username)
+    messages = (
+        Message.objects.filter(
+            Q(sender=request.user, receiver=user) |
+            Q(sender=user, receiver=request.user),
+            is_deleted=False
+        )
+        .values("message", "timestamp", "sender__username")
+        .order_by("timestamp")
+    )
+    return JsonResponse(list(messages), safe=False)
+
+@login_required
+def get_unread_messages_count(request):
+    count = Message.objects.filter(receiver=request.user, is_read=False).count()
+    return JsonResponse({'count': count})
+
+@login_required
+def mark_as_read(request, username):
+    Message.objects.filter(receiver=request.user, sender__username=username).update(is_read=True)
+    return JsonResponse({"status": "ok"})
+
+def delete_messages(request, username=None):
+    user = User.objects.get(username=username)
+    Message.objects.filter(
+        Q(sender=request.user, receiver=user) |
+        Q(sender=user, receiver=request.user)
+    ).update(is_deleted=True)
+    return JsonResponse({"status": "ok"})
+
+
+
 
 
 def giris(request):
@@ -77,10 +202,9 @@ def upload(request):
         user = request.user
         image = request.FILES.get("image_upload")
         caption = request.POST["caption"]
-
         # You don't need to check if caption is valid, it's a string, not a form field
         new_post = Post.objects.create(user=user, image=image, caption=caption)
-
+      
         if new_post:
             return redirect("homepage")
         else:
@@ -192,6 +316,24 @@ def profile(request, pk):
     user_profile = get_object_or_404(Profile, user=user_object)
     user_posts = Post.objects.filter(user=user_object)
     user_post_length = len(user_posts)
+    form = ApprovalForm()
+    if request.user.is_staff:  # Admin kontrolü
+        unapproved_users = User.objects.filter(profile__is_approved=False)
+    else:
+        unapproved_users = None
+
+
+    context = {
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+        "user_object": user_object,
+        "user_profile": user_profile,
+        "user_posts": user_posts,
+        "user_post_length": user_post_length,
+        "form": form,
+        "unapproved_users": unapproved_users,
+    }
 
     if request.method == "POST":
         form = ApprovalForm(request.POST)
@@ -201,22 +343,27 @@ def profile(request, pk):
             user_profile.save()
             return redirect("profilepage")  # Profil sayfasına geri dön
 
-    form = ApprovalForm()
-    if request.user.is_staff:  # Admin kontrolü
-        unapproved_users = User.objects.filter(profile__is_approved=False)
-    else:
-        unapproved_users = None
+    return render(request, 'profile.html', context)
 
-    context = {
-        "user_object": user_object,
-        "user_profile": user_profile,
-        "user_posts": user_posts,
-        "user_post_length": user_post_length,
-        "form": form,
-        "unapproved_users": unapproved_users,
-    }
 
-    return render(request, "profile.html", context)
+@login_required(login_url="loginpage")
+def upload_banner(request):
+    if request.method == 'POST':
+        banner_file = request.FILES.get('banner', None)
+        if banner_file:
+            try:
+                # Kullanıcının kimliğini alabilirsiniz veya başka bir yol kullanabilirsiniz
+                # Örneğin, request.user kullanarak
+                user_id = request.user.id
+                profile = Profile.objects.get(user__id=user_id)
+                profile.banner = banner_file
+                profile.save()
+                banner_url = profile.banner.url
+                return JsonResponse({'status': 'success', 'banner_url': banner_url})
+            except Profile.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Kullanıcı bulunamadı.'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Geçersiz istek.'})
 
 
 def cikis(request):
@@ -407,6 +554,18 @@ def unapproved_users(request):
 
     return render(request, "unapproved_users.html", context)
 
+def verified_user(request, user_id):
+    user_profile = get_object_or_404(Profile, user_id=user_id)
+    user_profile.verified = True
+    user_profile.save()
+    return redirect("admin_dashboard")  # Profil sayfanıza yönlendirme yapın
+def unverified(request):
+    # Onay bekleyen kullanıcıları sorgulayın
+    unverified = Profile.objects.filter(verified=False)
+
+    context = {"unverified": unverified}
+
+    return render(request, "unverified.html", context)
 
 def grant_moderator(request, user_id):
     if request.user.is_superuser:  # Sadece admin yetkilisi bu işlemi yapabilir
@@ -465,10 +624,11 @@ def admin_dashboard(request):
         users = User.objects.all()
         reports = Report.objects.all()
         unapproved_users = Profile.objects.filter(is_approved=False)
+        unverified = Profile.objects.filter(verified=False)
         return render(
             request,
             "admin_dashboard.html",
-            {"users": users, "reports": reports, "unapproved_users": unapproved_users},
+            {"users": users, "reports": reports, "unapproved_users": unapproved_users, "unverified": unverified},
         )
     else:
         return HttpResponseForbidden("Bu sayfaya erişim yetkiniz yok.")
@@ -494,6 +654,44 @@ def unban_user(request, user_id):
     if request.user.is_authenticated and request.user == user:
         logout(request)
     return redirect("admin_dashboard")
+
+
+def messages_view(request):
+    current_user = request.user
+    previous_chats = User.objects.filter(
+        Q(sent_messages__receiver=current_user)
+        | Q(received_messages__sender=current_user)
+    ).distinct()
+
+    # Arama kutusu için
+    search_query = request.GET.get("q")
+    if search_query:
+        users = User.objects.filter(username__icontains=search_query).exclude(
+            username=current_user.username
+        )
+    else:
+        users = None
+
+    # İlk önce konuşulan kişi veya aranan kişi için
+    receiver_id = request.GET.get("chat_with")
+    if receiver_id:
+        receiver = User.objects.get(id=receiver_id)
+        messages = Message.objects.filter(
+            (Q(sender=current_user) & Q(receiver=receiver))
+            | (Q(sender=receiver) & Q(receiver=current_user))
+        ).order_by("timestamp")
+    else:
+        receiver = None
+        messages = None
+
+    context = {
+        "previous_chats": previous_chats,
+        "search_results": users,
+        "messages": messages,
+        "receiver": receiver,
+    }
+
+    return render(request, "messages.html", context)
 
 
 def update_email_password(request):

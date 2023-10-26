@@ -10,4 +10,5 @@ class ReportAdmin(admin.ModelAdmin):
 admin.site.register(Profile)
 admin.site.register(Post)
 admin.site.register(Comment)
+admin.site.register(Message)
 admin.site.register(Report, ReportAdmin)

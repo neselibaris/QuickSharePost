@@ -17,6 +17,14 @@ def custom_upload_post_to(instance, filename):
     # instance.user.username ile yeni yükleme yolunu oluşturun
     return f"post_images/{instance.user.username}/{filename}"
 
+def custom_banner_upload_to(instance, filename):
+    user_folder = instance.user.username  # Kullanıcının adını kullanın
+    return f"Banners/{user_folder}/{filename}"
+
+
+
+
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -27,11 +35,14 @@ class Profile(models.Model):
     )
     location = models.CharField(max_length=100, blank=True)
     is_banned = models.BooleanField(("Hesap yasaklanmış mı?"), default=False)
-    is_approved = models.BooleanField(("Hesap onaylanmış mı?"), default=True)
+    is_approved = models.BooleanField(("Hesap onaylanmış mı?"), default=False)
     is_moderator = models.BooleanField(("Moderatör yetkisi verildi mi?"), default=False)
     education = models.CharField(max_length=100, blank=True, null=True)  # Eğitim süreci
     birthdate = models.DateField(null=True, blank=True)  # Doğum tarihi
     email = models.EmailField(max_length=100, blank=True, null=True)  # E-posta
+    verified = models.BooleanField(default=False )
+    banner = models.ImageField(upload_to=custom_banner_upload_to, default='default-banner.jpg', blank=True, null=True)
+
 
     def __str__(self):
         return self.user.username
@@ -96,6 +107,27 @@ class LikePost(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        User, related_name="sent_messages", on_delete=models.CASCADE
+    )
+    receiver = models.ForeignKey(
+        User, related_name="received_messages", on_delete=models.CASCADE
+    )
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Sender: {self.sender}, Receiver: {self.receiver}, Message: {self.message}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    last_cleared_timestamp = models.DateTimeField(null=True, blank=True)
 
 
 class Report(models.Model):
