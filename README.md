@@ -1,16 +1,16 @@
 # QuickSharePost
-### Kaya'nın Tarafımdan Şunlar Eklendi;
-- Hesap Ayarları sayfası düzenlendi.
-- Bildirim eklendi.
-- Ana sayfa görünümü değiştirildi.
-- Dark mode eklendi.
-- Navbar Stilize Edildi.
-- Profil  Sayfasının Tasarımı Değiştirildi
-- Özel Sohbet Eklendi (Direct Message)
-- Login ve Register Sayfa Tasarımı Değiştirildi.
-- Profil Sayfasına Banner Özelliği eklendi (Kullanıcılar Kendi Profiline Banner Koyabiliyor)
-- Çoğu sayfada stillemeler yapıldı
-- Onaylanmış Hesap Özelliği (Plus Hesabı) Eklendi
+### 🌟 Kaya'nın Tarafımdan Şunlar Eklendi 🌟;
+- 🛠 Hesap Ayarları Güncellendi - Daha kullanıcı dostu bir arayüz sağlandı.
+- 🔔 Bildirim Eklendi - Kullanıcılara önemli güncellemeler ve haberler için.
+- 🏠 Ana Sayfa Görünümü Yenilendi - Daha modern ve etkileşimli bir tasarım.
+- 🌑 Dark Mode Eklendi - Göz yormayan ve enerji tasarruflu bir kullanım için.
+- 🎨 Navbar Stilize Edildi - Navigasyon şimdi daha şık ve işlevsel.
+- 👤 Profil Sayfası Yenilendi - Daha kişisel ve detaylı profil sayfası.
+- 💬 Özel Sohbet Eklendi (Direct Message) - Kullanıcılar arası özel iletişim sağlandı.
+- 🌐 Login ve Register Sayfa Tasarımı Yenilendi - Daha iyi bir kullanıcı deneyimi için.
+- 🖼 Profil Sayfasına Banner Özelliği Eklendi - Kullanıcılar artık kendi profiline banner koyabiliyor.
+- 🎉 Stillemeler Yapıldı - Çoğu sayfada görsel ve işlevsel güncellemeler.
+- ✅ Onaylanmış Hesap Özelliği (Plus Hesabı) Eklendi - Güvenilirlik ve ek özellikler için.
   
 Kullanıcıların kolaylıkla tweet paylaşıp düzenleme ve silme işlemlerini yapabilirler.
 
