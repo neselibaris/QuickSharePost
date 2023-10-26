@@ -4,7 +4,7 @@
 - 🔔 Bildirim Eklendi - Kullanıcılara önemli güncellemeler ve haberler için.
 - 🏠 Ana Sayfa Görünümü Yenilendi - Daha modern ve etkileşimli bir tasarım.
 - 🌑 Dark Mode Eklendi - Göz yormayan ve enerji tasarruflu bir kullanım için.
-- 🎨 Navbar Stilize Edildi - Navigasyon şimdi daha şık ve işlevsel.
+- 🎨 Navbar Stilize Edildi - Navigasyon şimdi daha şık ve açılıp kapanabilme işlevine sahip.
 - 👤 Profil Sayfası Yenilendi - Daha kişisel ve detaylı profil sayfası.
 - 💬 Özel Sohbet Eklendi (Direct Message) - Kullanıcılar arası özel iletişim sağlandı.
 - 🌐 Login ve Register Sayfa Tasarımı Yenilendi - Daha iyi bir kullanıcı deneyimi için.
