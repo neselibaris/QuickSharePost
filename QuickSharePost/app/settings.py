@@ -30,24 +30,27 @@ DEBUG = True
 ALLOWED_HOSTS = ["example.com", "www.example.com", "127.0.0.1", "localhost"]
 
 # Loglama ayarları
+# settings.py
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": "DEBUG",  # Loglama seviyesini DEBUG olarak ayarlayın
+            "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": "django.log",
+            "filename": "error.log",
         },
     },
     "loggers": {
         "django": {
             "handlers": ["file"],
-            "level": "DEBUG",  # Loglama seviyesini DEBUG olarak ayarlayın
+            "level": "ERROR",
             "propagate": True,
         },
     },
 }
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,8 +61,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "socialm",
+    "channels",
 ]
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
