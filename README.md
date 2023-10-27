@@ -1,5 +1,5 @@
 # QuickSharePost
-### 🌟 Kaya'nın Tarafımdan Şunlar Eklendi 🌟;
+### 🌟 Kaya'nın Tarafından Şunlar Eklendi 🌟;
 - 🛠 Hesap Ayarları Güncellendi - Daha kullanıcı dostu bir arayüz sağlandı.
 - 🔔 Bildirim Eklendi - Kullanıcılara önemli güncellemeler ve haberleri bildirim yoluyla haber verilmektedir.
 - 🏠 Ana Sayfa Görünümü Yenilendi - küçük dokunuşlar yapıldı.
