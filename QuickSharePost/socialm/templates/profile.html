@@ -8,31 +8,44 @@ Profile - {{user.username}}
 {% endblock site-baslik %}
 
 {% block site-icerik %}
-
-<div class="row py-5 px-4">
-    <div class=" col-sm-10 mx-auto">
+<style>
+    body {
+        background: linear-gradient(to left top, #5f9bb0, #d6f9fe) !important;
+    }
+</style>
+<div class="row">
+    <div class=" col-sm-10" style="height: 400px; width: 100%; padding: 0; margin: 0;">
 
         <!-- Profile widget -->
-        <div class="bg-white shadow rounded overflow-hidden">
-            <div class="px-4 pt-0 pb-4 bg-dark">
-                <div class="media align-items-end profile-header">
-                    <div class="profile mr-3">
-                        <img src="{{user_profile.profileimg.url}}" alt="..." width="150"
-                            class="rounded mb-2 img-thumbnail mt-2"><a href="{% url 'settingspage' %}" class="btn btn-dark btn-sm btn-block">Edit
-                            profile</a>
-                    </div>
-                    <div class="media-body mb-5 text-white">
-                        <h4 class="mt-0 mb-0">{{user_profile.user.username}}</h4>
-                        <p class="small mb-4"> <i class="fa fa-map-marker mr-2"></i> {{user_profile.location}}</p>
-                        <p>{{user_profile.education}}</p>
-                        <p>{{user_profile.birthdate}}</p>
-                        <p>{{user.email}}</p>
-
+        <div class="">
+            {% if user_profile.user.username == request.user.username %}
+            <div id="bannerDiv" class="bg-dark" style="height: 400px; cursor: pointer;">
+                <!-- Banner resmi burada görünecek -->
+                {% else %}
+                <div id="bannerDivother" class="bg-dark" style="height: 400px;">
+                    {% endif %}
+                    {% if user_profile.banner %}
+                    <div class="media align-items-end profile-header d-flex justify-content-center align-items-end flex-row"
+                        style="width: 100%; height: 100%; background-image: url('{{ user_profile.banner.url }}'); background-size: cover;"
+                        id="bannerImage">
+                        {% else %}
+                        <!-- Diğer kodlar -->
+                        {% endif %}
                     </div>
                 </div>
-            </div>
 
-            <div class="bg-light p-4 d-flex justify-content-end text-center">
+                <div class="profile mr-3 d-flex justify-content-center align-items-center "
+                    style="position: relative;top: -105px;">
+                    <img src="{{ user_profile.profileimg.url }}" alt="..." width="150" height="75"
+                        class="rounded-full mb-2 img-thumbnail mt-2">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded overflow-hidden mb-5">
+            <!-- Gizli dosya inputu -->
+            <input type="file" id="bannerInput" style="display:none;">
+            <div class=" p-4 d-flex justify-content-end text-center">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
                         <h5 class="font-weight-bold mb-0 d-block">
@@ -49,7 +62,20 @@ Profile - {{user.username}}
             </div>
 
             <div class="py-4 px-4">
-
+                <div class="media-body mb-5 text-black">
+                    <h4 class="mt-0 mb-0">{{user_profile.user.username}} {% if user_profile.verified %}
+                        <img width="52" height="52" class="me-1" src="/media/verfiy.png" alt="Plus Rozeti"
+                            title="Plus Üye">
+                        {% else %}
+                        {% endif %}
+                    </h4>
+                    <p class="small mb-4"> <i class="fa fa-map-marker mr-2"></i> {{user_profile.location}}</p>
+                    <p>{{user_profile.education}}</p>
+                    <p>{{user_profile.birthdate}}</p>
+                    <p>{{user.email}}</p>
+                    <!-- <a href="{% url 'settingspage' %}" class="btn btn-dark btn-sm btn-block">Edit
+                          profile</a> -->
+                </div>
                 <div class="py-4">
                     <h5 class="mb-3">Bio</h5>
                     <div class="p-4 bg-light rounded shadow-sm">
@@ -63,17 +89,84 @@ Profile - {{user.username}}
 
                 <div class="row">
                     {% for post in user_posts %}
-                    <img src="{{post.image.url}}" alt="" class="img-fluid rounded shadow-sm col-lg-6 mb-2 pr-lg-1" high="100px">
+                    <img src="{{post.image.url}}" alt="" class="img-fluid rounded shadow-sm col-lg-6 mb-2 pr-lg-1"
+                        high="100px">
                     {% endfor %}
                 </div>
-
-
-
-
-
             </div>
-        </div><!-- End profile widget -->
+
+        </div>
+
+
+
 
     </div>
-</div>
-{% endblock site-icerik %}
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("bannerDiv").addEventListener("click", function () {
+                document.getElementById("bannerInput").click();
+            });
+
+            document.getElementById("bannerInput").addEventListener("change", function () {
+                var formData = new FormData();
+                formData.append("banner", this.files[0]);
+
+                // Burada kullanıcı adını alarak isteği doğru URL'ye gönderiyoruz
+                var username = "{{ user_profile.user.username }}"; // Django template ile kullanıcı adını alın
+                var url = `/upload_banner/`;
+
+                fetch(url, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === "success") {
+                            // Başarılı yanıt aldığımızda banner resmini güncelle
+                            document.getElementById("bannerImage").style.backgroundImage = `url(${data.banner_url})`;
+                        } else {
+                            alert("Lütfen başka bir fotoğraf deneyin.");
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Hata oluştu:", error);
+                        alert("Lütfen başka bir fotoğraf deneyin.");
+                    });
+            });
+
+
+        });
+
+    </script>
+
+    <!-- Gizli dosya inputu ve formu -->
+    <form id="bannerForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="bannerInput" name="banner" class="d-none">
+    </form>
+
+
+    {% endblock site-icerik %}

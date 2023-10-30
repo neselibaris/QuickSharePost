@@ -15,16 +15,87 @@
     <!--custom css-->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
+<style>        /* Yeni Eklenen CSS Kodları */
+    .register {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to left top, #5f9bb0, #d6f9fe);
 
+    }
 
+    .form {
+        border-radius: 40px;
+        width: 400px !important;
+    }
+
+    .login-page h1 {
+        margin: 0 0 20px 0;
+        font-weight: 400;
+        font-size: 24px;
+    }
+
+    .btn-success {
+        background-color: #2E94E3;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-success:hover {
+        background-color: #2278ac;
+    }
+
+    .message {
+        margin-top: 20px;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .message a {
+        color: #2E94E3;
+        text-decoration: none;
+    }
+
+    .message a:hover {
+        text-decoration: underline;
+    }
+
+    .form .message {
+        color: #000 !important;
+    }
+
+    input {
+        border-radius: 40px;
+    }
+
+    @keyframes gradientShift {
+        0% {
+            background-position: 100% 0;
+        }
+
+        100% {
+            background-position: 0 0;
+        }
+    }
+</style>
 
 </head>
 
 {% block site-icerik %}
 
-<div class="login-page">
+<div class="login-page register">
     <div class="form">
+        <div class="login-header">
+            <img src=/media/logo.png alt="Buzz Logo" style="max-width: 200px;" class="login-logo">
 
+
+        </div>
         <form class="registerForm" action="{% url 'registerpage' %}" method="post">
             {% csrf_token %}
 
@@ -33,12 +104,10 @@
             <input type="text" name="username" placeholder="Kullanıcı adınız">
             <input type="password" name="password" placeholder="Şifreniz">
             <input type="email" name="email" placeholder="Email adresiniz">
-
-            <p class="message">Already registered? <a href="{% url 'loginpage' %}">Sign In</a></p>
-
             <div class="mb-3" style="margin-top: 1rem;">
-                <button class="btn btn-success" type="submit">Kayıt Ol</button>
+                <button class="btn btn-register" type="submit">Kayıt Ol</button>
             </div>
+            <p class="message">Already registered? <a style="color: #2E94E3 !important; font-weight: bold;" href="{% url 'loginpage' %}">Sign In</a></p>
 
         </form>
     </div>

@@ -3,33 +3,54 @@
 
         <div class="d-flex w-100 h-75" id="nav">
             <ul class="list-unstyled h-100 d-flex flex-column justify-content-center">
+                <li> <a href="{% url 'homepage' %}" role="button" class="btn" title="Anasayfa"><i id="fa-solid"
+                            class="fa-solid fa-house"></i></a></li>
 
-                <a href="{% url 'homepage' %}" role="button" class="btn" title="Anasayfa"><i id="fa-solid"
-                        class="fa-solid fa-house"></i></a>
-
-
-                {% if user.profile.profileimg %}
-                <a href="{% url 'profilepage' pk=user.username %}" role="button" class="btn " title="Profil Sayfası">
-                    <img class="rounded-circle" src="{{user.profile.profileimg.url}}" alt="" width="40px" height="40px">
-                </a>
-                {% endif %}
-
-
-                <a href="{% url 'settingspage' %}" role="button" class="btn" title="Profil Düzenleme"><i id="fa-solid"
-                        class="fa-solid fa-gear "></i>
-                </a>
-
-                <button class="btn text-white" title="Post Paylaşım" data-bs-toggle="modal"
-                    data-bs-target="#postmodal"><i id="fa-solid" class="fa-solid fa-plus "></i></button>
-
-                {% if request.user.is_superuser %}
+                <li> {% if user.profile.profileimg %}
+                    <a href="{% url 'profilepage' pk=user.username %}" role="button" class="btn "
+                        title="Profil Sayfası">
+                        <img class="rounded-circle" src="{{user.profile.profileimg.url}}" alt="" width="40px"
+                            height="40px">
+                    </a>
+                    {% endif %}
+                </li>
 
 
+                <li>
+                    <a href="#" role="button" class="btn" title="Bell" id="bellButton">
+                        <div class="notification-icon-container">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="notification-count">{{ new_notification_count }}</span>
+                        </div>
+                    </a>
+
+                </li>
 
 
-                <a href="{% url 'admin_dashboard' %}" role="button" class="btn" title="Admin Dashboard"><i id="fa-solid"
-                        class="fa-solid fa-lock "></i></a>
-                {% endif %}
+                <li><button class="btn text-white" title="Post Paylaşım" data-bs-toggle="modal"
+                        data-bs-target="#postmodal"><i id="fa-solid" class="fa-solid fa-plus "></i></button>
+
+                    {% if request.user.is_superuser %}</li>
+
+
+
+
+
+                <li> <a href="{% url 'admin_dashboard' %}" role="button" class="btn" title="Admin Dashboard"><i
+                            id="fa-solid" class="fa-solid fa-lock "></i></a>
+                    {% endif %}
+                </li>
+
+
+
+                <li> <a href="#" role="button" class="btn darkbtn" title="Dark Mode" id="darkModeButton">
+                        <i class="fa-solid fa-toggle-off"></i>
+                    </a></li>
+
+                <li> <a href="{% url 'settingspage' %}" role="button" class="btn" title="Profil Düzenleme"><i
+                            id="fa-solid" class="fa-solid fa-gear "></i>
+                    </a>
+                </li>
 
 
 
@@ -37,15 +58,18 @@
             </ul>
         </div>
         <div class="d-flex w-100 align-items-end h-25">
-            <ul>
-                <a href="{% url 'logoutpage' %}" role="button" class="btn" title="Çıkış Yap"><i id="fa-solid"
-                        class="fa-solid fa-right-from-bracket "></i></a>
+            <ul class="list-unstyled">
+                <li><a href="{% url 'logoutpage' %}" role="button" class="btn" title="Çıkış Yap"><i id="fa-solid"
+                            class="fa-solid fa-right-from-bracket "></i></a></li>
             </ul>
         </div>
 
     </div>
 
 
+</div>
+<div class="toggle" id="toggleBtn" onclick="toggleSidenav()" style="padding-right: 60px;">
+    <img class="navlogo" style=" margin-right: 15px; margin-bottom: 15px;" src="/media/logo.png" alt="" srcset="">
 </div>
 
 
@@ -64,7 +88,7 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">İçerik</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"
+                            <textarea class="form-control text-box" id="exampleFormControlTextarea1" rows="6"
                                 style="resize: none;" name="caption"></textarea>
                         </div>
                         <div class="mb-3">
@@ -82,3 +106,97 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // HTML'deki düğmeyi ve ikonu seçin
+    const darkModeButton = document.getElementById("darkModeButton");
+    const icon = darkModeButton.querySelector("i");
+    // Dark Mode durumunu takip etmek için bir değişken tanımlayın
+    let isDarkMode = false;
+
+    // Düğmeye tıklandığında çalışacak işlevi tanımlayın
+    darkModeButton.addEventListener("click", function () {
+        isDarkMode = !isDarkMode; // Dark Mode durumunu tersine çevirin
+
+        // Kök değişkenlerini güncellemek yerine dark-mode sınıfını ekleyin veya çıkarın
+        if (isDarkMode) {
+            document.documentElement.style.setProperty("--primarycolor", "#121212");
+            document.documentElement.style.setProperty("--secondarycolor", "#242424");
+            document.documentElement.style.setProperty("--text-color", "#ffffff");
+            document.documentElement.style.setProperty("--outlinecolor", "#4d4d4d");
+            document.documentElement.style.setProperty("--inputcolor", "#333333");
+            document.documentElement.style.setProperty("--navbarcolor", "#0066cc");
+            document.documentElement.style.setProperty("--postbodycolor", "#1e1e1e");
+            icon.classList.remove("fa-toggle-off");
+            icon.classList.add("fa-toggle-on");
+            darkModeButton.title = "Light Mode"; // Düğme başlığını güncelleyin
+        } else {
+            document.documentElement.style.setProperty("--primarycolor", "#eee");
+            document.documentElement.style.setProperty("--secondarycolor", "#f7f7f7");
+            document.documentElement.style.setProperty("--text-color", "#333333");
+            document.documentElement.style.setProperty("--outlinecolor", "#000000");
+            document.documentElement.style.setProperty("--inputcolor", "#f2f2f2");
+            document.documentElement.style.setProperty("--navbarcolor", "#111827");
+            document.documentElement.style.setProperty("--postbodycolor", "#ffffff");
+            icon.classList.remove("fa-toggle-on");
+            icon.classList.add("fa-toggle-off");
+            darkModeButton.title = "Dark Mode"; // Düğme başlığını güncelleyin
+        }
+
+
+    });
+
+
+</script>
+<script>
+    function toggleSidenav() {
+        var sidenav = document.querySelector('.sidenav');
+        var toggle = document.getElementById('toggleBtn');
+
+        if (sidenav.classList.contains('open')) {
+            sidenav.classList.remove('open');
+            toggle.style.left = '0';
+        } else {
+            sidenav.classList.add('open');
+            toggle.style.left = '4%';
+        }
+    }
+
+</script>
+<script>// JavaScript code
+    document.addEventListener('DOMContentLoaded', function () {
+        const bellButton = document.getElementById('bellButton');
+        const notificationCount = document.querySelector('.notification-count');
+        let latestNotificationId = 0;  // Initialize with the latest seen notification ID
+
+        function fetchNotificationCount() {
+            // Query for the count of unread notifications after the latest seen ID
+            $.get(`/get_notification_count/`, function (data) {
+                notificationCount.textContent = data.count;
+            });
+        }
+
+        function fetchLatestNotification() {
+            // Fetch the latest unread notification
+            // "/go_latest_notification/" için AJAX isteği
+            $.get('/go_latest_notification/', function (data) {
+                notificationCount.textContent = 0;
+                alert(data.content);
+                latestNotificationId = data.id;
+            }).fail(function (xhr, status, error) {
+                console.error("AJAX hatası: " + error);
+            });
+
+        }
+
+        // Page load: Get the initial notification count
+        fetchNotificationCount();
+
+        // Bell icon click: Fetch the latest unread notification
+        bellButton.addEventListener('click', function () {
+            fetchLatestNotification();
+        });
+    });
+
+</script>

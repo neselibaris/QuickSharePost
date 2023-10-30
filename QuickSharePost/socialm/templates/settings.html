@@ -10,53 +10,76 @@ Hesap Ayarları
 
 <div class="settings">
   <h2>Hesap Ayarları</h2>
-  <h4>{{user.username}}</h4>
-  <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Şifre ve Mail güncelleme
-  </button>
+  <div class="container-box">
+    <div class="image-container">
+      <img width="200" height="200" src="{{user_profile.profileimg.url}}" alt="" class="rounded-full"
+        id="profile-image">
+
+      <div class="overlay" id="overlay">
+        <i class="fa-solid fa-camera"></i>
+      </div>
+    </div>
+  </div>
+
   <hr>
 
 
-
-  <form class="row" action="" method="POST" id="settingspage" enctype="multipart/form-data">
+  <form class="row " action="" method="POST" id="settingspage" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="mb-3 col-lg-12 col-md-12 col-sm-12">
-      <label for="profileimg" class="form-label">Profil resminiz</label>
-      <br>
-      <img width="130" src="{{user_profile.profileimg.url}}" alt="" class="rounded">
-      <input type="file" class="form-control mt-2" name="image">
     </div>
 
-    <div class="mb-3 col-lg-12 col-md-8 col-sm-6">
-      <label for="exampleInputPassword1" class="form-label">Lokasyon</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" name="location"
-        value="{{user_profile.location}}">
+
+
+
+    <div class="mb-3 col-lg-12 col-md-8 col-sm-6" id="location-edit">
+      <h4 class="mt-2 mb-1 text-center">{{user.username}}</h4>
+      <label for="exampleInputPassword1" class="form-label label-editable">
+        <i class="fa-solid fa-location-dot"></i> Lokasyon: <br> <span
+          id="location-text">{{user_profile.location}}</span>
+      </label>
+      <label class="inputlabel">Lokasyon </label>
+      <input type="text" class="form-control" id="location-input" name="location" value="{{user_profile.location}}">
+
     </div>
+
 
     <div class=" mb-3 col-lg-6 col-md-8 col-sm-6 ">
-      <label class="form-label" for="floatingTextarea">Hakkımda</label>
+      <label class="form-label" for="floatingTextarea"><i class="fa-regular fa-id-card"></i> Hakkımda: <br>
+        <span>{{user_profile.bio}}</span></label>
+      <label class="inputlabel">Hakkımda: </label>
       <textarea class="form-control" id="floatingTextarea" name="bio">{{user_profile.bio}}</textarea>
 
     </div>
 
     <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
-      <label for="education" class="form-label">Eğitim Süreci</label>
+      <label for="education" class="form-label"><i class="fa-solid fa-graduation-cap"></i> Eğitim Süreci: <br>
+        <span>{{user_profile.education}}</span></label>
+      <label class="inputlabel">Eğitim Süreci </label>
       <input type="text" class="form-control" id="education" name="education" value="{{user_profile.education}}">
     </div>
 
     <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
-      <label for="birthdate" class="form-label">Doğum Tarihi</label>
+      <label for="birthdate" class="form-label"><i class="fa-solid fa-cake-candles"></i> Doğum Tarihi: <br>
+        <span>{{user_profile.birthdate}}</span></label>
+      <label class="inputlabel">Doğum Tarihi </label>
       <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{user_profile.birthdate}}">
     </div>
 
     <div class="mb-3 col-lg-8 col-md-8 col-sm-6">
-      <label for="email" class="form-label">E-posta</label>
+      <label for="email" class="form-label"><i class="fa-regular fa-envelope"></i> E-posta: <br>
+        <span>{{user_profile.email}}</span></label>
+      <label class="inputlabel">E-Posta </label>
       <input type="email" class="form-control" id="email" name="email" value="{{user_profile.email}}">
     </div>
     <div class="">
-      <button type="submit" class="btn btn-success">Kaydet</button>
-      <a href="{% url 'homepage' %}" class="btn btn-danger" role="button">İptal et</a>
+      <button class="btn btn-success" id="edit"><i class="fa-solid fa-pencil edit-icon"></i></button>
+      <button type="submit" class="btn btn-success" id="save-button">Kaydet</button>
+      <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Şifre ve Mail güncelleme
+      </button>
+      <a href="{% url 'homepage' %}" class="btn btn-danger" role="button" id="cancel-button">İptal et</a>
     </div>
   </form>
 </div>
@@ -93,13 +116,98 @@ Hesap Ayarları
         </form>
 
       </div>
-      
+
     </div>
   </div>
 </div>
 <div>
 
 </div>
+<script>
+  const profileImage = document.getElementById('overlay');
+  const imageElement = document.getElementById('profile-image');
+
+  profileImage.addEventListener('click', function () {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.className = 'form-control mt-2';
+    fileInput.name = 'image';
+
+    // Simulate a click event on the file input
+    fileInput.click();
+
+    fileInput.addEventListener('change', function () {
+      const selectedFile = fileInput.files[0];
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        // Görseli Django view'e gönderin
+        fetch('/update_profile_image/', {
+          method: 'POST',
+          body: formData,
+        })
+          .then(response => {
+            if (!response.ok) {
+              // HTTP status code 200-299 arasında değilse hata oluşmuştur.
+              // Özel bir hata mesajı döndürmek isterseniz bu kısmı değiştirebilirsiniz.
+              throw new Error('Resim yüklenirken bir hata oluştu.');
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.message) {
+              // Eğer sunucu tarafından bir mesaj dönüyorsa, bu mesajı kullanıcıya göster.
+              alert(data.message);
+            } else {
+              alert('Resim başarıyla yüklendi.');
+            }
+          })
+          .catch(error => {
+            // Genel hata mesajı
+            alert(error.message);
+          });
+
+
+        // Profil resmini güncelleyin
+        imageElement.src = URL.createObjectURL(selectedFile);
+      }
+    });
+  });
+
+</script>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const editIcon = document.getElementById("edit");
+    const inputEdits = document.querySelectorAll(".form-control");
+    const inputlabels = document.querySelectorAll(".inputlabel");
+    const labelEditables = document.querySelectorAll(".form-label");
+    const cancelbutton = document.getElementById("cancel-button");
+    const saveButton = document.getElementById("save-button");
+
+    editIcon.addEventListener("click", function (event) {
+      event.preventDefault(); // Sayfa yenilemesini engelle
+      inputEdits.forEach(input => (input.style.display = "flex"));
+      labelEditables.forEach(label => (label.style.display = "none"));
+      inputlabels.forEach(label => (label.style.display = "inline-block"));
+      saveButton.style.display = "inline-block";
+      cancelbutton.style.display = "inline-block";
+      editIcon.style.display = "none";
+    });
+    saveButton.addEventListener("click", function () {
+      inputEdits.forEach(input => (input.style.display = "none"));
+      labelEditables.forEach(label => (label.style.display = "inline-block"));
+      inputlabels.forEach(label => (label.style.display = "none"));
+      this.style.display = "none";
+      saveButton.style.display = "none";
+      cancelbutton.style.display = "none";
+    });
+  });
+</script>
+
 
 
 

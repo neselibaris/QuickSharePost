@@ -1,5 +1,17 @@
 # QuickSharePost
-
+### 🌟 Kaya'nın Tarafından Şunlar Eklendi 🌟;
+- 🛠 Hesap Ayarları Güncellendi - Daha kullanıcı dostu bir arayüz sağlandı.
+- 🔔 Bildirim Eklendi - Kullanıcılara önemli güncellemeler ve haberleri bildirim yoluyla haber verilmektedir.
+- 🏠 Ana Sayfa Görünümü Yenilendi - küçük dokunuşlar yapıldı.
+- 🌑 Dark Mode Eklendi - Göz yormayan koyu ekran modu getirildi.
+- 🎨 Navbar Stilize Edildi - Navigasyon şimdi daha şık ve açılıp kapanabilme işlevine sahip.
+- 👤 Profil Sayfası Yenilendi - Daha kişisel ve detaylı profil sayfası haline getirildi.
+- 💬 Özel Sohbet Eklendi (Direct Message) - Kullanıcılar arası özel iletişim sağlandı.
+- 🌐  Daha iyi bir kullanıcı deneyimi için, login ve register sayfa tasarımı yenilendi.
+- 🖼 Profil Sayfasına Banner Özelliği Eklendi - Kullanıcılar artık kendi profiline banner koyabiliyor.
+- 🎉 Stillemeler Yapıldı - Çoğu sayfada görsel ve işlevsel olarak güncellendi.
+- ✅ Onaylanmış Hesap Özelliği (Plus Hesabı) Eklendi - Güvenilirlik ve ek özellikler için.
+  
 Kullanıcıların kolaylıkla tweet paylaşıp düzenleme ve silme işlemlerini yapabilirler.
 
 Yorum yapma düzenleme ve silme işlemi
@@ -26,8 +38,18 @@ py manage.py makemigrations
 py manage.py migrate
 
 py manage.py runserver
-
 Örnekler:
+![Ekran görüntüsü 2023-10-26 230644](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/8519949e-2bef-4ce6-94e2-f06ec70f00ef)
+![Ekran görüntüsü 2023-10-26 230705](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/56fcef2c-980e-454e-ac9b-c042e28182bf)
+![Ekran görüntüsü 2023-10-26 230735](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/9f795805-1eab-48a1-87dc-a6815cd61994)
+![Ekran görüntüsü 2023-10-26 230809](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/ab3ca762-97e4-4156-80a8-85a76938540f)
+![Ekran görüntüsü 2023-10-26 230825](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/d9cc33f5-0616-45b8-bc96-497ba43f3ace)
+![Ekran görüntüsü 2023-10-26 230842](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/b3cfecc9-c3f6-4127-99d4-81fdba60c3a3)
+![Ekran görüntüsü 2023-10-26 230912](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/b67f2f3a-db36-4f05-9ecc-c1cf3833dd51)
+![Ekran görüntüsü 2023-10-26 230929](https://github.com/wuqqers/A-website-with-the-Steam-interface-style/assets/62030865/20306df5-8984-4547-aef3-8ad87f60e339)
+
+
+Eski Örnekler:
 
 Dashboard
 ![dashboard](https://github.com/neselibaris/QuickSharePost/assets/114444125/7b9033f3-a4bb-4ed2-aea8-e97206978037)
